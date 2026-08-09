@@ -1,6 +1,8 @@
 # CodePreview
 
 > Visualizador de código ao vivo — cole, faça upload de arquivos ou pastas inteiras e veja o preview instantâneo.
+>
+> **Demo:** https://lucasgabrieldevgg.github.io/codepreview/
 
 ## ✨ Features
 
@@ -17,7 +19,7 @@
 
 ## 🚀 Como usar
 
-1. Abra `index.html` em qualquer navegador
+1. Acesse a [demo](https://lucasgabrieldevgg.github.io/codepreview/) ou abra `index.html`
 2. Cole código nos blocos ou faça upload de arquivos
 3. O preview atualiza automaticamente
 4. Use `Ctrl+Enter` pra forçar atualização
@@ -27,6 +29,7 @@
 - HTML + CSS + JavaScript puro (zero dependências)
 - Sem build, sem npm, sem framework
 - Single file — um `index.html` faz tudo
+- Deploy no GitHub Pages (grátis)
 
 ## 📄 Licença
 
