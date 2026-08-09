@@ -206,26 +206,7 @@ function buildPreviewHTML(blocks) {
 
   if (!html && !css && !js && !markdown) return null;
 
-  return `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<style>
-body{font-family:-apple-system,sans-serif;padding:20px;margin:0}
-${css}
-</style>
-</head>
-<body>
-${html}
-<script>
-try{
-${js}
-}catch(e){
-document.body.innerHTML+='<pre style="color:red;padding:10px;background:#fee;border-radius:4px;margin-top:10px">Error: '+e.message+'</pre>';
-}
-</script>
-</body>
-</html>`;
+  return '<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n<style>\nbody{font-family:-apple-system,sans-serif;padding:20px;margin:0}\n' + css + '\n</style>\n</head>\n<body>\n' + html + '\n<' + 'script>\ntry{\n' + js + '\n}catch(e){\ndocument.body.innerHTML+="<pre style=\\"color:red;padding:10px;background:#fee;border-radius:4px;margin-top:10px\\">Error: "+e.message+"</pre>";\n}\n</' + 'script>\n</body>\n</html>';
 }
 
 function markdownToHtml(md) {
