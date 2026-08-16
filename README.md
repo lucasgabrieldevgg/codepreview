@@ -1,5 +1,26 @@
 # CodePreview
 
+> Live code viewer — paste code, upload files or entire folders and get an instant preview.
+
+**Live demo:** https://lucasgabrieldevgg.github.io/codepreview/
+
+## ✨ Features
+
+- 🎯 **Multiple code blocks** — add as many as you need (HTML, CSS, JS, Markdown and more)
+- 📄 **File upload** — drag or pick `.html`, `.css`, `.js`, `.json`, `.md`, `.py`, `.xml`, `.svg`
+- 📁 **Folder upload** — select a whole folder and every file loads at once
+- 👁️ **Live preview** — HTML/CSS/JS render in a sandboxed iframe
+- 📝 **Source view** — toggle between rendered preview and code
+- ⌨️ **`Ctrl+Enter`** refreshes the preview; drag & drop anywhere
+- 🔒 **Safe sandbox** — the preview runs isolated from your browser
+- 🎨 Dark theme, responsive, 100% client-side
+
+---
+
+# 🇧🇷 Português (original)
+
+# CodePreview
+
 > Visualizador de código ao vivo — cole, faça upload de arquivos ou pastas inteiras e veja o preview instantâneo.
 >
 > **Demo:** https://lucasgabrieldevgg.github.io/codepreview/
