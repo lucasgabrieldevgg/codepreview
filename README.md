@@ -1,38 +1,21 @@
-# CodePreview
+# 👁️ CodePreview
 
-> Live code viewer — paste code, upload files or whole folders and get an instant preview.
+**Paste your HTML, see the site.** Or load your project folder and see it rendered **with real structure** — `css/`, `js/`, `img/`, relative paths, just like the real site.
 
-**Demo:** https://lucasgabrieldevgg.github.io/codepreview/
+## How to use
+1. **Paste** your HTML → **▶ Ver site** (or `Ctrl+Enter`) → fullscreen site
+2. **📁 Load your project folder** (or **drag & drop** it) → opens from `index.html` with everything in place
+3. **🗑️ Limpar site** (always up top) → clears everything (double-click confirm)
 
-[Leia em Português](README.pt-BR.md)
+- ✏️ **✏️ Editar** goes back to the editor without losing anything
+- 💾 Single project, **saved in your browser** — close and reopen, it's still there
+- 🧹 Skips `node_modules` and `.git` · up to ~40 MB · 8 MB per file
 
-## ✨ Features
+## How folder rendering actually works
+A **mini static server inside your browser** (Service Worker + Cache API) serves your files at the right paths — your **browser itself** resolves `css/estilo.css`, `../img/photo.png`, `fetch()` and ES modules, exactly like a published site. Requires a modern desktop browser. On mobile, use the paste box.
 
-- 🎯 **Multiple code blocks** — add as many as you need (HTML, CSS, JS, Markdown and more)
-- 📄 **File upload** — drag or pick `.html`, `.css`, `.js`, `.json`, `.md`, `.py`, `.xml`, `.svg`
-- 📁 **Folder upload** — select a whole folder and every file loads at once
-- 👁️ **Live preview** — HTML/CSS/JS render in a sandboxed iframe
-- 📝 **Source view** — toggle between rendered preview and code
-- 🎨 **Dark theme** — clean and minimal
-- 📱 **Responsive** — works on mobile and desktop
-- ⌨️ **Shortcut** — `Ctrl+Enter` refreshes the preview
-- 🖱️ **Drag & drop** — drop files straight onto the page
-- 🔒 **Safe sandbox** — the preview runs isolated from your browser
+Honest limits: for **static** sites (html/css/js/images/fonts). Projects with a build step or backend won't render.
 
-## 🚀 How to use
+Open: **https://lucasgabrieldevgg.github.io/codepreview/**
 
-1. Open the [demo](https://lucasgabrieldevgg.github.io/codepreview/) or `index.html`
-2. Paste code into the blocks or upload files
-3. The preview updates automatically
-4. Use `Ctrl+Enter` to force a refresh
-
-## 🛠️ Technologies
-
-- Plain HTML + CSS + JavaScript (zero dependencies)
-- No build, no npm, no framework
-- Single file — one `index.html` does everything
-- Hosted on GitHub Pages (free)
-
-## 📄 License
-
-MIT
+Made by [lucasgabrieldevgg](https://github.com/lucasgabrieldevgg) 💜
