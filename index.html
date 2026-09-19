@@ -2,337 +2,273 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CodePreview — Visualizador de Código</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0f13">
+<title>CodePreview — cole o HTML, veja o site (ou carregue a pasta)</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👁️</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#c9d1d9;--dim:#8b949e;--accent:#58a6ff;--green:#3fb950;--red:#f85149}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-header{background:var(--card);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0}
-header h1{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
-header h1 span{color:var(--accent)}
-.toolbar{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
-.btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;transition:.15s}
-.btn:hover{border-color:var(--accent);color:var(--accent)}
-.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn-primary:hover{opacity:.85;color:#fff}
-.btn-danger:hover{border-color:var(--red);color:var(--red)}
-.main{flex:1;display:flex;overflow:hidden}
-.editor-pane{flex:1;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border)}
-.blocks{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:12px}
-.block{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
-.block-header{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
-.block-header select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:4px;font-size:12px;cursor:pointer}
-.block-header .block-name{font-size:12px;color:var(--dim);font-family:monospace;flex:1}
-.block-header .btn-icon{background:none;border:none;color:var(--dim);cursor:pointer;padding:4px;border-radius:4px;font-size:14px}
-.block-header .btn-icon:hover{color:var(--red)}
-.block textarea{background:var(--bg);border:none;color:var(--text);padding:12px;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:13px;line-height:1.5;resize:vertical;min-height:150px;flex:1;outline:none;width:100%}
-.block textarea:focus{background:#0a0e14}
-.preview-pane{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.preview-tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);padding:0 12px;gap:4px;flex-shrink:0}
-.preview-tab{padding:8px 16px;font-size:12px;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:.15s}
-.preview-tab:hover{color:var(--text)}
-.preview-tab.active{color:var(--accent);border-color:var(--accent)}
-.preview-content{flex:1;overflow:hidden;position:relative}
-.preview-content iframe{width:100%;height:100%;border:none;background:#fff}
-.code-view{padding:16px;overflow-y:auto;height:100%;font-family:monospace;font-size:13px;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--text)}
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--dim);gap:12px;text-align:center;padding:20px}
-.empty-state .icon{font-size:48px;opacity:.3}
-.empty-state p{font-size:14px;max-width:300px}
-.file-info{padding:8px 12px;font-size:11px;color:var(--dim);font-family:monospace;border-top:1px solid var(--border);background:rgba(255,255,255,.01);flex-shrink:0}
-.badge{font-size:10px;padding:2px 6px;border-radius:4px;background:var(--accent);color:#fff;font-weight:600}
-.badge-green{background:var(--green)}
-.drop-zone{border:2px dashed var(--border);border-radius:8px;padding:20px;text-align:center;color:var(--dim);font-size:13px;cursor:pointer;transition:.15s}
-.drop-zone:hover,.drop-zone.dragover{border-color:var(--accent);color:var(--accent);background:rgba(88,166,255,.05)}
-@media(max-width:768px){.main{flex-direction:column}.editor-pane{border-right:none;border-bottom:1px solid var(--border);max-height:50%}.preview-pane{min-height:50%}}
+:root{--bg:#0d0f13;--bg2:#14171d;--bg3:#1b1f27;--tx:#eef1f6;--muted:#98a0ad;--brand:#f5b73d;--hot:#ff8a3d;--bad:#f0604d;--ok:#3ecf8e;--line:#242830}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:0;color:inherit;background:none}
+input,textarea{font:inherit}
+/* topo */
+.top{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--bg2);position:sticky;top:0;z-index:10}
+.logo{font-weight:800;letter-spacing:-.02em;font-size:15.5px;white-space:nowrap}
+.logo .eye{margin-right:6px}
+.status{color:var(--muted);font-size:12.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn{border-radius:11px;padding:9px 15px;font-weight:700;font-size:13.5px;transition:filter .15s,transform .1s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn.p{background:linear-gradient(135deg,var(--brand),var(--hot));color:#141005}
+.btn.g{background:var(--bg3);border:1px solid var(--line);color:var(--tx)}
+.btn.d{background:var(--bg3);border:1px solid var(--line);color:var(--bad)}
+.btn.d.arm{background:linear-gradient(135deg,#f0604d,#ff8a3d);color:#fff;animation:pd 1s infinite}
+@keyframes pd{0%,100%{filter:brightness(1)}50%{filter:brightness(1.22)}}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+/* editor */
+main{max-width:860px;margin:0 auto;padding:26px 16px 90px}
+h1{font-size:22px;letter-spacing:-.02em;margin-bottom:4px}
+.sub{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+.box{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px}
+#ed{width:100%;min-height:300px;background:var(--bg3);border:1px solid var(--line);border-radius:12px;color:var(--tx);padding:14px;outline:none;resize:vertical;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:13px;line-height:1.55}
+#ed:focus{border-color:var(--brand)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.ou{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:14px 0;letter-spacing:.08em}
+.ou::before,.ou::after{content:'';flex:1;height:1px;background:var(--line)}
+.hint{color:var(--muted);font-size:12px}
+kbd{background:var(--bg3);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:11px}
+.dz{border:1.5px dashed var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--muted);font-size:13.5px;transition:border-color .15s,background .15s}
+.dz:hover{border-color:var(--brand)}
+body.drag .dz,body.drag main{border-color:var(--brand)}
+body.drag::after{content:'Solte a pasta aqui 📁';position:fixed;inset:0;background:rgba(13,15,19,.86);z-index:50;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--brand)}
+.flist{margin-top:10px;font-size:12.5px;color:var(--muted);max-height:150px;overflow:auto}
+.flist b{color:var(--tx)}
+/* site (preview) */
+#vsite{position:fixed;inset:0;top:53px;display:flex;flex-direction:column;background:var(--bg)}
+#frame{flex:1;border:0;width:100%;background:#fff}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1b1e26;border:1px solid var(--line);padding:11px 17px;border-radius:12px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:80;max-width:92vw;text-align:center}
+.toast.on{opacity:1}
+@media(max-width:600px){h1{font-size:19px}.top{padding:10px 12px}}
 </style>
 </head>
 <body>
-
-<header>
-  <h1>📋 <span>Code</span>Preview</h1>
-  <div class="toolbar">
-    <button class="btn btn-primary" onclick="addBlock()">+ Bloco</button>
-    <label class="btn" title="Upload de arquivo">
-      📄 Arquivo
-      <input type="file" onchange="handleFiles(this.files)" hidden accept=".html,.htm,.css,.js,.json,.md,.txt,.py,.xml,.svg">
-    </label>
-    <label class="btn" title="Upload de pasta">
-      📁 Pasta
-      <input type="file" onchange="handleFiles(this.files)" webkitdirectory hidden>
-    </label>
-    <button class="btn" onclick="updatePreview()" title="Atualizar preview (Ctrl+Enter)">▶ Preview</button>
-    <button class="btn btn-danger" onclick="clearAll()" title="Limpar tudo">🗑</button>
-  </div>
+<header class="top">
+  <span class="logo"><span class="eye">👁️</span>CodePreview</span>
+  <span class="status" id="st">nada carregado</span>
+  <button class="btn d" id="b-limpar">🗑️ Limpar site</button>
 </header>
 
-<div class="main">
-  <div class="editor-pane">
-    <div class="blocks" id="blocks">
-      <!-- Blocks added here -->
-    </div>
-    <div class="file-info" id="fileInfo">Nenhum arquivo carregado</div>
-  </div>
-  <div class="preview-pane">
-    <div class="preview-tabs">
-      <div class="preview-tab active" onclick="switchTab('preview',this)">👁 Preview</div>
-      <div class="preview-tab" onclick="switchTab('code',this)">📝 Código</div>
-    </div>
-    <div class="preview-content" id="previewContent">
-      <div class="empty-state">
-        <div class="icon">👁</div>
-        <p>Cole código ou faça upload de arquivos.<br>O preview aparece aqui automaticamente.</p>
-      </div>
+<main id="ved">
+  <h1>Cole o HTML, veja o site.</h1>
+  <p class="sub">Ou carregue a <b>pasta do seu projeto</b> e ele renderiza com estrutura de verdade (css/, js/, img/…). Tudo fica só no seu navegador.</p>
+
+  <div class="box">
+    <textarea id="ed" spellcheck="false" placeholder="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  …cole seu site inteiro aqui…
+&lt;/html&gt;"></textarea>
+    <div class="row">
+      <button class="btn p" id="b-ver">▶ Ver site</button>
+      <span class="hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> também funciona · salva sozinho no navegador</span>
     </div>
   </div>
+
+  <div class="ou">ou carregue a pasta</div>
+
+  <div class="box">
+    <button class="btn g" id="b-pasta">📁 Carregar pasta do projeto</button>
+    <span class="hint">índice usado: <b>index.html</b> (ou o primeiro .html) · pula <code>node_modules</code> e <code>.git</code> · até ~40 MB</span>
+    <input type="file" id="inp" webkitdirectory hidden>
+    <div class="flist" id="flist"></div>
+  </div>
+
+  <div class="dz" id="dz">💡 dica: arraste a pasta do projeto pra cá direto</div>
+</main>
+
+<div id="vsite" hidden>
+  <iframe id="frame" title="preview do site" sandbox="allow-scripts allow-forms allow-popups allow-modals"></iframe>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-let blockCount = 0;
-
-const LANGUAGES = [
-  {value: 'html', label: 'HTML', ext: ['html','htm'], preview: true},
-  {value: 'css', label: 'CSS', ext: ['css'], preview: true},
-  {value: 'javascript', label: 'JavaScript', ext: ['js'], preview: true},
-  {value: 'markdown', label: 'Markdown', ext: ['md','markdown'], preview: true},
-  {value: 'json', label: 'JSON', ext: ['json'], preview: false},
-  {value: 'python', label: 'Python', ext: ['py'], preview: false},
-  {value: 'xml', label: 'XML', ext: ['xml','svg'], preview: false},
-  {value: 'text', label: 'Texto', ext: ['txt'], preview: false},
-];
-
-function getLangByExt(ext) {
-  for (const lang of LANGUAGES) {
-    if (lang.ext.includes(ext.toLowerCase())) return lang.value;
+'use strict';
+/* ════════ CP-CORE (funções puras — testadas em node) ════════ */
+const CP={
+ BASE(){return location.pathname.replace(/[^/]*$/,'')},
+ PROOT(){return CP.BASE()+'p/v1/'},
+ url(p){return CP.PROOT()+p.split('/').map(encodeURIComponent).join('/')},
+ MIME:{html:'text/html; charset=utf-8',htm:'text/html; charset=utf-8',css:'text/css; charset=utf-8',js:'text/javascript; charset=utf-8',mjs:'text/javascript; charset=utf-8',json:'application/json',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',svg:'image/svg+xml',ico:'image/x-icon',woff:'font/woff',woff2:'font/woff2',ttf:'font/ttf',otf:'font/otf',mp4:'video/mp4',webm:'video/webm',mp3:'audio/mpeg',wav:'audio/wav',pdf:'application/pdf',txt:'text/plain; charset=utf-8',xml:'application/xml',md:'text/plain; charset=utf-8',map:'application/json',wasm:'application/wasm'},
+ mime(p){const e=(p.split('.').pop()||'').toLowerCase();return CP.MIME[e]||'application/octet-stream'},
+ SKIP:['node_modules/','.git/'],
+ skip(p){const n=p.toLowerCase();return CP.SKIP.some(s=>n.indexOf(s)>=0)},
+ MAX1:8*1024*1024, MAXT:40*1024*1024,
+ /* índice: index.html na raiz > qualquer index.html > primeiro .html */
+ idxDe(list){
+  const nx=list.find(x=>x.path.toLowerCase()==='index.html');
+  if(nx)return nx.path;
+  const sub=list.filter(x=>x.path.toLowerCase().endsWith('/index.html')).sort((a,b)=>a.path.length-b.path.length)[0];
+  if(sub)return sub.path;
+  return (list.find(x=>/\.html?$/i.test(x.path))||{}).path;
+ },
+ plan(pares){
+  const list=[],erros=[];let total=0;
+  for(const {path,file} of pares){
+   if(file.size>CP.MAX1){erros.push(path+' (arquivo >8 MB)');continue;}
+   if(total+file.size>CP.MAXT){erros.push(path+' (passou de 40 MB no total)');continue;}
+   total+=file.size;list.push({path,file});
   }
-  return 'text';
-}
-
-function addBlock(lang = 'html', content = '', name = '') {
-  blockCount++;
-  const id = 'block-' + blockCount;
-  const div = document.createElement('div');
-  div.className = 'block';
-  div.id = id;
-  
-  const options = LANGUAGES.map(l => 
-    `<option value="${l.value}" ${l.value === lang ? 'selected' : ''}>${l.label}</option>`
-  ).join('');
-  
-  div.innerHTML = `
-    <div class="block-header">
-      <select onchange="updatePreview()">
-        ${options}
-      </select>
-      <span class="block-name">${name || 'Bloco ' + blockCount}</span>
-      <button class="btn-icon" onclick="removeBlock('${id}')" title="Remover">✕</button>
-    </div>
-    <textarea oninput="schedulePreview()" placeholder="Cole seu código aqui...">${content}</textarea>
-  `;
-  document.getElementById('blocks').appendChild(div);
-  schedulePreview();
-}
-
-function removeBlock(id) {
-  document.getElementById(id).remove();
-  if (document.querySelectorAll('.block').length === 0) {
-    addBlock();
-  }
-  updatePreview();
-}
-
-function getBlocks() {
-  return Array.from(document.querySelectorAll('.block')).map(block => {
-    const select = block.querySelector('select');
-    const textarea = block.querySelector('textarea');
-    const name = block.querySelector('.block-name').textContent;
-    return {
-      lang: select.value,
-      content: textarea.value,
-      name: name,
-    };
-  });
-}
-
-let previewTimer = null;
-function schedulePreview() {
-  clearTimeout(previewTimer);
-  previewTimer = setTimeout(updatePreview, 400);
-}
-
-function updatePreview() {
-  const blocks = getBlocks();
-  if (blocks.length === 0 || blocks.every(b => !b.content.trim())) {
-    showEmpty();
-    return;
-  }
-
-  // Check if any block is previewable
-  const hasPreviewable = blocks.some(b => {
-    const lang = LANGUAGES.find(l => l.value === b.lang);
-    return lang && lang.preview;
-  });
-
-  if (currentTab === 'preview' && hasPreviewable) {
-    const html = buildPreviewHTML(blocks);
-    showIframe(html);
-  } else {
-    showCode(blocks);
-  }
-}
-
-function buildPreviewHTML(blocks) {
-  let html = '';
-  let css = '';
-  let js = '';
-  let markdown = '';
-
-  for (const block of blocks) {
-    if (block.lang === 'html') html += block.content + '\n';
-    else if (block.lang === 'css') css += block.content + '\n';
-    else if (block.lang === 'javascript') js += block.content + '\n';
-    else if (block.lang === 'markdown') markdown += block.content + '\n';
-  }
-
-  // If only markdown, render it as HTML
-  if (markdown && !html) {
-    html = markdownToHtml(markdown);
-  }
-
-  // If no HTML but has CSS or JS, create a basic HTML wrapper
-  if (!html && (css || js)) {
-    html = '<div id="app"></div>';
-  }
-
-  if (!html && !css && !js && !markdown) return null;
-
-  return '<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n<style>\nbody{font-family:-apple-system,sans-serif;padding:20px;margin:0}\n' + css + '\n</style>\n</head>\n<body>\n' + html + '\n<' + 'script>\ntry{\n' + js + '\n}catch(e){\ndocument.body.innerHTML+="<pre style=\\"color:red;padding:10px;background:#fee;border-radius:4px;margin-top:10px\\">Error: "+e.message+"</pre>";\n}\n</' + 'script>\n</body>\n</html>';
-}
-
-function markdownToHtml(md) {
-  return md
-    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code>$1</code>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-    .replace(/^\|(.+)\|$/gm, '<tr><td>$1</td></tr>')
-    .wrap('<p>', '</p>');
-}
-
-String.prototype.wrap = function(open, close) {
-  return open + this + close;
+  const index=CP.idxDe(list);
+  return {ok:list.length>0&&!!index,list,total,erros,index};
+ },
 };
+/*CP-END*/
 
-function showIframe(html) {
-  const container = document.getElementById('previewContent');
-  container.innerHTML = '<iframe id="previewFrame" sandbox="allow-scripts"></iframe>';
-  const frame = document.getElementById('previewFrame');
-  frame.srcdoc = html;
+const $=s=>document.querySelector(s);
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+let MODE=LS.get('cp_mode')||''; // '' | 'paste' | 'folder'
+let FILES=[]; // modo pasta: [{path}]
+let ARM=false,ARM_T=null;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),3600)}
+const CACHE='cp-v1';
+async function cache(){return caches.open(CACHE)}
+
+/* ── sw ── */
+async function swPronto(){
+ if(!('serviceWorker' in navigator))return false;
+ try{await navigator.serviceWorker.register('./sw.js');await navigator.serviceWorker.ready;return true}
+ catch(e){return false}
 }
 
-function showCode(blocks) {
-  const container = document.getElementById('previewContent');
-  const code = blocks.map(b => {
-    const lang = LANGUAGES.find(l => l.value === b.lang);
-    return `<!-- ${b.name} (${lang ? lang.label : b.lang}) -->\n${b.content}`;
-  }).join('\n\n---\n\n');
-  container.innerHTML = `<div class="code-view">${escapeHtml(code)}</div>`;
+/* ── grava projeto no cache ── */
+async function gravar(pares){
+ const c=await cache();
+ // limpa projeto antigo
+ const keys=await c.keys();
+ await Promise.all(keys.filter(r=>r.url.includes(CP.PROOT())).map(r=>c.delete(r)));
+ for(const {path,file,text} of pares){
+  const res=file?new Response(file,{headers:{'Content-Type':CP.mime(path)}})
+               :new Response(text,{headers:{'Content-Type':'text/html; charset=utf-8'}});
+  await c.put(CP.url(path),res);
+ }
 }
 
-function showEmpty() {
-  document.getElementById('previewContent').innerHTML = `
-    <div class="empty-state">
-      <div class="icon">👁</div>
-      <p>Cole código ou faça upload de arquivos.<br>O preview aparece aqui automaticamente.</p>
-    </div>`;
+/* ── editor ⇄ site ── */
+function verEditor(){$('#ved').hidden=false;$('#vsite').hidden=true;}
+function verSite(){
+ $('#ved').hidden=true;$('#vsite').hidden=false;
+ $('#frame').src=CP.url('index.html')+'?t='+Date.now();
+}
+function status(){
+ $('#st').textContent=!MODE?'nada carregado':(MODE==='paste'?'html colado · salvo no navegador':'pasta · '+FILES.length+' arquivos');
 }
 
-function escapeHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+/* ── ações ── */
+async function verDoColado(){
+ const txt=$('#ed').value;
+ if(!txt.trim())return toast('cola seu HTML primeiro 🙂');
+ MODE='paste';LS.set('cp_mode','paste');LS.set('cp_html',txt);
+ await gravar([{path:'index.html',text:txt}]);
+ status();verSite();
+}
+async function carregarPasta(pares){
+ const plan=CP.plan(pares);
+ if(!plan.ok)return toast(plan.list.length?'não achei nenhum .html na pasta 🤔':'a pasta tá vazia (ou só com node_modules/.git)');
+ if(plan.erros.length)toast('⚠️ pulados: '+plan.erros.slice(0,2).join(', ')+(plan.erros.length>2?'…':''));
+ await gravar(plan.list);
+ MODE='folder';FILES=plan.list.map(x=>({path:x.path}));
+ LS.set('cp_mode','folder');LS.set('cp_files',JSON.stringify(FILES));
+ LS.del('cp_html');
+ status();toast('📁 '+plan.list.length+' arquivos · abrindo '+CP.idxDe(plan.list));
+ verSite();
+}
+async function limpar(){
+ const b=$('#b-limpar');
+ if(!ARM){
+  ARM=true;b.classList.add('arm');b.textContent='⚠️ tem certeza? clique de novo';
+  clearTimeout(ARM_T);ARM_T=setTimeout(()=>{ARM=false;b.classList.remove('arm');b.textContent='🗑️ Limpar site'},5000);
+  return;
+ }
+ ARM=false;clearTimeout(ARM_T);b.classList.remove('arm');b.textContent='🗑️ Limpar site';
+ const c=await cache();const keys=await c.keys();
+ await Promise.all(keys.filter(r=>r.url.includes(CP.PROOT())).map(r=>c.delete(r)));
+ ['cp_mode','cp_html','cp_files'].forEach(k=>LS.del(k));
+ MODE='';FILES=[];
+ $('#ed').value='';$('#flist').innerHTML='';
+ $('#frame').src='about:blank';
+ status();verEditor();toast('🧼 tudo limpo — é só colar de novo');
 }
 
-let currentTab = 'preview';
-function switchTab(tab, el) {
-  currentTab = tab;
-  document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  updatePreview();
+/* ── pasta → pares (input + drag&drop) ── */
+function deInput(files){
+ const pares=[];
+ for(const f of files){
+  const p=(f.webkitRelativePath||f.name).replace(/^[^/]+\//,''); // tira o nome da pasta-raiz
+  if(!p||CP.skip(p))continue;
+  pares.push({path:p,file:f});
+ }
+ return pares;
+}
+async function deDrop(dt){
+ const itens=[...(dt.items||[])];
+ const entrada=itens.find(i=>i.webkitGetAsEntry&&i.webkitGetAsEntry()&&i.webkitGetAsEntry().isDirectory);
+ if(entrada){
+  const raiz=entrada.webkitGetAsEntry(),pares=[];
+  const anda=(entry,base)=>new Promise(res=>{
+   if(entry.isFile)entry.file(f=>{pares.push({path:base+entry.name,file:f});res();},()=>res());
+   else if(entry.isDirectory){
+    const leitor=entry.createReader();
+    const ler=()=>leitor.readEntries(async ents=>{
+     if(!ents.length)return res();
+     for(const e2 of ents)if(!CP.skip(base+entry.name+'/'+e2.name))await anda(e2,base+entry.name+'/');
+     ler();
+    },()=>res());
+    ler();
+   }else res();
+  });
+  await anda(raiz,'');
+  return pares.map(p=>({path:p.path.replace(/^[^/]+\//,''),file:p.file}));
+ }
+ const f=dt.files&&dt.files[0];
+ if(f&&/\.html?$/i.test(f.name))return [{path:'index.html',file:f}];
+ return [];
 }
 
-function handleFiles(files) {
-  const valid = [];
-  let skipped = 0;
-  for (const file of files) {
-    const ext = file.name.split('.').pop() || 'txt';
-    const lang = getLangByExt(ext);
-    valid.push({name: file.name, lang, ext});
-  }
-  
-  // Read each file
-  let loaded = 0;
-  for (const file of files) {
-    const ext = file.name.split('.').pop() || 'txt';
-    const lang = getLangByExt(ext);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      addBlock(lang, e.target.result, file.name);
-      loaded++;
-      if (loaded === files.length) {
-        updateFileInfo(files);
-        updatePreview();
-      }
-    };
-    reader.readAsText(file);
-  }
-}
-
-function updateFileInfo(files) {
-  const info = document.getElementById('fileInfo');
-  if (files.length === 1) {
-    info.textContent = `📄 ${files[0].name} (${(files[0].size/1024).toFixed(1)}KB)`;
-  } else {
-    const langs = {};
-    for (const f of files) {
-      const ext = f.name.split('.').pop() || 'txt';
-      langs[ext] = (langs[ext] || 0) + 1;
-    }
-    const summary = Object.entries(langs).map(([ext, count]) => `${count}× .${ext}`).join(', ');
-    info.textContent = `📁 ${files.length} arquivos: ${summary}`;
-  }
-}
-
-function clearAll() {
-  if (!confirm('Limpar todos os blocos?')) return;
-  document.getElementById('blocks').innerHTML = '';
-  blockCount = 0;
-  addBlock();
-  document.getElementById('fileInfo').textContent = 'Nenhum arquivo carregado';
-  updatePreview();
-}
-
-// Drag and drop
-document.addEventListener('dragover', e => { e.preventDefault(); });
-document.addEventListener('drop', e => {
-  e.preventDefault();
-  const files = e.dataTransfer.files;
-  if (files.length > 0) handleFiles(files);
+/* ── binds ── */
+$('#b-ver').onclick=verDoColado;
+$('#ed').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')verDoColado()});
+let _sv;$('#ed').addEventListener('input',()=>{clearTimeout(_sv);_sv=setTimeout(()=>LS.set('cp_html',$('#ed').value),500)});
+$('#b-pasta').onclick=()=>$('#inp').click();
+$('#inp').onchange=e=>{const p=deInput(e.target.files);if(!p.length)return toast('não consegui ler a pasta (nesse navegador só dá colar mesmo)');carregarPasta(p);e.target.value='';};
+$('#b-limpar').onclick=limpar;
+document.addEventListener('dragover',e=>{e.preventDefault();document.body.classList.add('drag')});
+document.addEventListener('dragleave',e=>{if(!e.relatedTarget)document.body.classList.remove('drag')});
+document.addEventListener('drop',async e=>{
+ e.preventDefault();document.body.classList.remove('drag');
+ try{const p=await deDrop(e.dataTransfer);if(!p.length)return toast('solte a pasta do projeto (ou um .html)');carregarPasta(p);}catch(err){toast('não rolou ler o que soltou 🤔')}
 });
 
-// Keyboard shortcut
-document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-    e.preventDefault();
-    updatePreview();
+/* ── boot: restaura projeto salvo ── */
+(async()=>{
+ $('#ed').value=LS.get('cp_html')||'';
+ const temSW=await swPronto();
+ if(MODE&&temSW){
+  const c=await cache();
+  const tem=await c.match(CP.url('index.html'),{ignoreSearch:true});
+  if(tem){status();verSite();if(MODE==='paste')$('#ed').value=LS.get('cp_html')||'';return;}
+  // cache do projeto se perdeu (limpeza do navegador)
+  MODE='';LS.del('cp_mode');LS.del('cp_files');
+  status();toast('o projeto salvo não sobreviveu à limpeza do navegador — carrega de novo 😉');
+ }else if(MODE==='paste'&&!temSW){
+  const h=LS.get('cp_html')||'';$('#ed').value=h;
+  if(h.trim()){ // sem SW (navegador velho): srcdoc fallback
+   MODE='paste';status();
+   $('#frame').srcdoc=h;verSite();return;
   }
-});
-
-// Init
-addBlock('html');
+ }
+ status();
+})();
 </script>
 </body>
 </html>
