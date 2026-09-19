@@ -134,11 +134,20 @@ function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clea
 const CACHE='cp-v1';
 async function cache(){return caches.open(CACHE)}
 
-/* ── sw ── */
-async function swPronto(){
+/* ── sw: só navega quando o servidor interno CONTROLA a página ── */
+async function swControlando(){
  if(!('serviceWorker' in navigator))return false;
- try{await navigator.serviceWorker.register('./sw.js');await navigator.serviceWorker.ready;return true}
- catch(e){return false}
+ try{
+  if(!navigator.serviceWorker.controller)await navigator.serviceWorker.register('./sw.js');
+  if(!navigator.serviceWorker.controller){
+   await navigator.serviceWorker.ready;
+   await Promise.race([
+    new Promise(r=>navigator.serviceWorker.addEventListener('controllerchange',r,{once:true})),
+    new Promise((_,n)=>setTimeout(n,3000))
+   ]);
+  }
+  return !!navigator.serviceWorker.controller;
+ }catch(e){return false}
 }
 
 /* ── grava projeto no cache ── */
@@ -156,9 +165,10 @@ async function gravar(pares){
 
 /* ── editor ⇄ site ── */
 function verEditor(){$('#ved').hidden=false;$('#vsite').hidden=true;}
-function verSite(){
+function verSite(txt){
  $('#ved').hidden=true;$('#vsite').hidden=false;
- $('#frame').src=CP.url('index.html')+'?t='+Date.now();
+ if(txt){$('#frame').removeAttribute('src');$('#frame').srcdoc=txt;}
+ else{$('#frame').removeAttribute('srcdoc');$('#frame').src=CP.url('index.html')+'?t='+Date.now();}
 }
 function status(){
  $('#st').textContent=!MODE?'nada carregado':(MODE==='paste'?'html colado · salvo no navegador':'pasta · '+FILES.length+' arquivos');
@@ -169,13 +179,19 @@ async function verDoColado(){
  const txt=$('#ed').value;
  if(!txt.trim())return toast('cola seu HTML primeiro 🙂');
  MODE='paste';LS.set('cp_mode','paste');LS.set('cp_html',txt);
- await gravar([{path:'index.html',text:txt}]);
- status();verSite();
+ if(await swControlando()){
+  await gravar([{path:'index.html',text:txt}]);
+  status();verSite();
+ }else{ // navegador bloqueou o servidor interno → modo simples (srcdoc)
+  status();verSite(txt);
+  toast('modo simples: esse navegador bloqueou o servidor interno');
+ }
 }
 async function carregarPasta(pares){
  const plan=CP.plan(pares);
  if(!plan.ok)return toast(plan.list.length?'não achei nenhum .html na pasta 🤔':'a pasta tá vazia (ou só com node_modules/.git)');
  if(plan.erros.length)toast('⚠️ pulados: '+plan.erros.slice(0,2).join(', ')+(plan.erros.length>2?'…':''));
+ if(!(await swControlando())){verEditor();return toast('esse navegador bloqueou o modo pasta 🙁 — cola o HTML aqui que funciona igual');}
  await gravar(plan.list);
  MODE='folder';FILES=plan.list.map(x=>({path:x.path}));
  LS.set('cp_mode','folder');LS.set('cp_files',JSON.stringify(FILES));
@@ -252,20 +268,19 @@ document.addEventListener('drop',async e=>{
 /* ── boot: restaura projeto salvo ── */
 (async()=>{
  $('#ed').value=LS.get('cp_html')||'';
- const temSW=await swPronto();
- if(MODE&&temSW){
+ const ctrl=await swControlando();
+ if(MODE&&ctrl){
   const c=await cache();
   const tem=await c.match(CP.url('index.html'),{ignoreSearch:true});
-  if(tem){status();verSite();if(MODE==='paste')$('#ed').value=LS.get('cp_html')||'';return;}
-  // cache do projeto se perdeu (limpeza do navegador)
-  MODE='';LS.del('cp_mode');LS.del('cp_files');
-  status();toast('o projeto salvo não sobreviveu à limpeza do navegador — carrega de novo 😉');
- }else if(MODE==='paste'&&!temSW){
-  const h=LS.get('cp_html')||'';$('#ed').value=h;
-  if(h.trim()){ // sem SW (navegador velho): srcdoc fallback
-   MODE='paste';status();
-   $('#frame').srcdoc=h;verSite();return;
-  }
+  if(tem){status();verSite();return;}
+  if(MODE==='folder'){LS.del('cp_mode');LS.del('cp_files');MODE='';FILES=[];
+   status();toast('o projeto salvo não sobreviveu à limpeza do navegador — carrega a pasta de novo 😉');return;}
+  MODE='';LS.del('cp_mode');
+  status();toast('o projeto salvo não sobreviveu à limpeza do navegador — cola de novo 😉');return;
+ }
+ if(MODE==='paste'&&!ctrl){
+  const h=LS.get('cp_html')||'';
+  if(h.trim()){status();verSite(h);return;}
  }
  status();
 })();
