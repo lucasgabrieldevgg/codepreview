@@ -3,7 +3,7 @@
 **Cole o HTML, veja o site.** Ou carregue a pasta do seu projeto e veja ele renderizado **com estrutura de verdade** — `css/`, `js/`, `img/`, caminhos relativos, tudo como no site real.
 
 ## Como usa
-1. **Cole** seu HTML na caixa → clique **▶ Ver site** (ou `Ctrl+Enter`) → o site ocupa a tela
+1. **Cole** seu HTML na caixa → clique **▶ Ver site** (ou `Ctrl+Enter`) → o site ocupa a tela (roda **direto**, sem servidor interno)
 2. **📁 Carregue a pasta** do projeto (ou **arraste** ela pra página) → abre pelo `index.html` com tudo no lugar
 3. **🗑️ Limpar site** (fica lá em cima) → zera tudo e volta pro editor (pede 2 cliques, sem susto)
 
