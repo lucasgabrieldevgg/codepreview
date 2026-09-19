@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>CodePreview — quase lá</title>
+<style>
+body{background:#0d0f13;color:#eef1f6;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:24px;box-sizing:border-box;text-align:center}
+.c{max-width:520px}
+h1{font-size:21px;margin:0 0 10px}
+p{color:#98a0ad;font-size:14.5px;line-height:1.65;margin:8px 0}
+ol{text-align:left;color:#98a0ad;font-size:14px;line-height:1.9;display:inline-block;margin:10px 0}
+kbd{background:#1b1f27;border:1px solid #242830;border-radius:6px;padding:1px 7px;color:#eef1f6;font-size:12.5px}
+a,button{color:#141005;background:linear-gradient(135deg,#f5b73d,#ff8a3d);text-decoration:none;font-weight:700;border:0;border-radius:11px;padding:11px 18px;font-size:14px;cursor:pointer;display:inline-block;margin-top:10px}
+#sw{color:#3ecf8e;font-size:12.5px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="c">
+  <h1>👀 Esse endereço é interno do preview</h1>
+  <p>O CodePreview monta o site num "servidor imaginário" dentro do navegador. Se você tá vendo isso, o site não foi montado (ou a página do app estava velha na memória).</p>
+  <ol>
+    <li>Vá na aba do <b>CodePreview</b></li>
+    <li>Aperte <kbd>Ctrl</kbd>+<kbd>F5</kbd> (recarga dura)</li>
+    <li>Cole o HTML / carregue a pasta e clique <b>▶ Ver site</b></li>
+  </ol>
+  <a href="../../../">Abrir o CodePreview</a>
+  <div id="sw"></div>
+</div>
+<script>
+navigator.serviceWorker&&navigator.serviceWorker.getRegistration().then(r=>{
+  document.getElementById('sw').textContent=r?('servidor interno: '+(r.active?'ativo ✅':'instalando…')):'servidor interno: não suportado/bloqueado neste navegador';
+}).catch(()=>{document.getElementById('sw').textContent='servidor interno: erro ao consultar';});
+</script>
+</body>
+</html>
