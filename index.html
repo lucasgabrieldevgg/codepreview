@@ -175,17 +175,11 @@ function status(){
 }
 
 /* ── ações ── */
-async function verDoColado(){
+function verDoColado(){
  const txt=$('#ed').value;
  if(!txt.trim())return toast('cola seu HTML primeiro 🙂');
  MODE='paste';LS.set('cp_mode','paste');LS.set('cp_html',txt);
- if(await swControlando()){
-  await gravar([{path:'index.html',text:txt}]);
-  status();verSite();
- }else{ // navegador bloqueou o servidor interno → modo simples (srcdoc)
-  status();verSite(txt);
-  toast('modo simples: esse navegador bloqueou o servidor interno');
- }
+ status();verSite(txt); // modo direto: roda na hora, sem servidor interno — 404 é impossível
 }
 async function carregarPasta(pares){
  const plan=CP.plan(pares);
@@ -212,7 +206,7 @@ async function limpar(){
  ['cp_mode','cp_html','cp_files'].forEach(k=>LS.del(k));
  MODE='';FILES=[];
  $('#ed').value='';$('#flist').innerHTML='';
- $('#frame').src='about:blank';
+ $('#frame').removeAttribute('srcdoc');$('#frame').src='about:blank';
  status();verEditor();toast('🧼 tudo limpo — é só colar de novo');
 }
 
@@ -268,19 +262,18 @@ document.addEventListener('drop',async e=>{
 /* ── boot: restaura projeto salvo ── */
 (async()=>{
  $('#ed').value=LS.get('cp_html')||'';
- const ctrl=await swControlando();
- if(MODE&&ctrl){
-  const c=await cache();
-  const tem=await c.match(CP.url('index.html'),{ignoreSearch:true});
-  if(tem){status();verSite();return;}
-  if(MODE==='folder'){LS.del('cp_mode');LS.del('cp_files');MODE='';FILES=[];
-   status();toast('o projeto salvo não sobreviveu à limpeza do navegador — carrega a pasta de novo 😉');return;}
-  MODE='';LS.del('cp_mode');
-  status();toast('o projeto salvo não sobreviveu à limpeza do navegador — cola de novo 😉');return;
- }
- if(MODE==='paste'&&!ctrl){
+ if(MODE==='paste'){ // modo direto: nem espera servidor interno
   const h=LS.get('cp_html')||'';
   if(h.trim()){status();verSite(h);return;}
+  MODE='';LS.del('cp_mode');
+ }else if(MODE==='folder'){
+  try{FILES=JSON.parse(LS.get('cp_files')||'[]')}catch(e){FILES=[]}
+  if(await swControlando()){
+   const tem=await cache().then(c=>c.match(CP.url('index.html'),{ignoreSearch:true}));
+   if(tem){status();verSite();return;}
+  }
+  LS.del('cp_mode');LS.del('cp_files');MODE='';FILES=[];
+  status();toast('o projeto salvo não sobreviveu à limpeza do navegador — carrega a pasta de novo 😉');return;
  }
  status();
 })();
