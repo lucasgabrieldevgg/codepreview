@@ -3,7 +3,7 @@
 **Paste your HTML, see the site.** Or load your project folder and see it rendered **with real structure** — `css/`, `js/`, `img/`, relative paths, just like the real site.
 
 ## How to use
-1. **Paste** your HTML → **▶ Ver site** (or `Ctrl+Enter`) → fullscreen site
+1. **Paste** your HTML → **▶ Ver site** (or `Ctrl+Enter`) → fullscreen site (runs **instantly**, no server involved)
 2. **📁 Load your project folder** (or **drag & drop** it) → opens from `index.html` with everything in place
 3. **🗑️ Limpar site** (always up top) → clears everything (double-click confirm)
 
