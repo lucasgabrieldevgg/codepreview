@@ -58,8 +58,10 @@ body.drag .dz,body.drag main{border-color:var(--amber)}
 body.drag::after{content:'Solte a pasta aqui 📁';position:fixed;inset:0;background:rgba(16,14,10,.92);z-index:100;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--amber)}
 .flist{margin-top:10px;font-size:12px;color:var(--muted);max-height:150px;overflow:auto}
 .flist b{color:var(--tx)}
-/* site (preview) */
+/* site (preview) — barra própria, nada flutua sobre o site */
 #vsite{position:fixed;inset:0;top:53px;display:flex;flex-direction:column;background:var(--bg)}
+#pbar{height:46px;display:flex;align-items:center;gap:12px;padding:0 12px;background:var(--bg2);border-bottom:1.5px solid var(--line);flex-shrink:0}
+#pbar .hint{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #frame{flex:1;border:0;width:100%;background:#fff}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--bg3);border:1.5px solid var(--amber);color:var(--tx);padding:11px 17px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:80;max-width:92vw;text-align:center}
 .toast.on{opacity:1}
@@ -102,7 +104,10 @@ body.drag::after{content:'Solte a pasta aqui 📁';position:fixed;inset:0;backgr
 </main>
 
 <div id="vsite" hidden>
-  <button id="b-editar" class="btn g" style="position:absolute;top:10px;right:12px;z-index:5">✏️ Editar</button>
+  <div id="pbar">
+    <button id="b-editar" class="btn g">✏️ Editar</button>
+    <span class="hint">seu site roda num iframe isolado (sandbox) — nada vaza pra esta página</span>
+  </div>
   <iframe id="frame" title="preview do site" sandbox="allow-scripts allow-forms allow-popups allow-modals"></iframe>
 </div>
 
@@ -183,8 +188,12 @@ async function gravar(pares){
 function verEditor(){$('#ved').hidden=false;$('#vsite').hidden=true;}
 function verSite(txt){
  $('#ved').hidden=true;$('#vsite').hidden=false;
- if(txt){$('#frame').removeAttribute('src');$('#frame').srcdoc=txt;}
- else{$('#frame').removeAttribute('srcdoc');$('#frame').src=CP.url('index.html')+'?t='+Date.now();}
+ const f=$('#frame');
+ if(txt){
+  f.removeAttribute('src');f.removeAttribute('srcdoc');
+  f.srcdoc=txt; /* remove+set garante recarga mesmo com o MESMO texto (setar valor igual não dispara reload) */
+ }
+ else{f.removeAttribute('srcdoc');f.removeAttribute('src');f.src=CP.url('index.html')+'?t='+Date.now();}
 }
 function status(){
  $('#st').textContent=!MODE?'nada carregado':(MODE==='paste'?'html colado · salvo no navegador':'pasta · '+FILES.length+' arquivos');

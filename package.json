@@ -1,6 +1,6 @@
 {
   "name": "codepreview",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "👁️ Cole o HTML, veja o site (ou carregue a pasta do projeto) — tudo no navegador",
   "scripts": {
