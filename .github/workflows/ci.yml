@@ -16,7 +16,7 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm test
-      - name: higiene CRA
+      - name: higiene
         run: |
           grep -q "JetBrains Mono" index.html
           if grep -E "font-family:'Inter'|linear-gradient" index.html p/v1/index.html sw.js | grep -v "repeating-linear-gradient" | grep -qv "Zero gradiente"; then

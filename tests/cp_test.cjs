@@ -1,5 +1,5 @@
 // ============================================================
-// 👁️ Suíte CRA — CodePreview (monitor de fósforo âmbar)
+// 👁️ Suíte de consistência — CodePreview (monitor de fósforo âmbar)
 // Testa o CP-CORE (funções puras do "servidor imaginário"),
 // o boot no jsdom e BLINDA o anti-vibe nos 3 arquivos.
 // ============================================================
@@ -87,7 +87,7 @@ function arq(bytes) { return { size: bytes }; }
     ok(/removeAttribute\('srcdoc'\)[\s\S]{0,40}f\.srcdoc=txt/.test(srcApp), 'verSite remove srcdoc antes de setar → reload garantido no re-ver');
   }
 
-  console.log('— 🔥 CRA: NADA DE CARA DE IA (3 arquivos) —');
+  console.log('— 🔥 NADA DE CARA DE IA (3 arquivos) —');
   {
     ok(/fonts.googleapis.com\/css2\?family=JetBrains\+Mono/.test(html) && /'JetBrains Mono'/.test(html), 'JetBrains Mono de ponta a ponta');
     ok(!/font-family:[^;}]*Inter/i.test(html), 'zero Inter na tipografia');
