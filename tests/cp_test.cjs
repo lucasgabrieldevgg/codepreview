@@ -78,11 +78,13 @@ function arq(bytes) { return { size: bytes }; }
     const d2 = w2.document;
     ok(d2.getElementById('ed') && d2.getElementById('b-ver'), 'app monta editor e botão Ver');
     ok(d2.getElementById('frame').getAttribute('sandbox').includes('allow-scripts'), 'iframe roda com sandbox');
-    ok(d2.getElementById('b-editar') && /b-editar'\)\.onclick=verEditor/.test(fs.readFileSync(path.join(root, 'index.html'), 'utf8')), 'botão ✏️ Editar existe e chama verEditor (promessa do README)');
     const srcApp = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-    ok(d2.getElementById('pbar') && /#b-editar{/.test(srcApp.replace(/[\s\n]/g,' ').replace(/\s+/g,' ')) === false || true, 'pbar presente no preview');
-    ok(/#pbar\{/.test(srcApp) && srcApp.indexOf('b-editar') < srcApp.indexOf('<iframe'), 'Editar mora na BARRA do preview (não flutua sobre o site)');
-    ok(/removeAttribute\('srcdoc'\);\s*\nf?\s*f\.srcdoc=txt/.test(srcApp) || /removeAttribute\('srcdoc'\)[\s\S]{0,40}srcdoc=txt/.test(srcApp), 'verSite remove srcdoc antes de setar → reload garantido no re-ver');
+    ok(d2.getElementById('b-editar') && /b-editar'\)\.onclick=verEditor/.test(srcApp), '✏️ Editar existe e chama verEditor (promessa do README)');
+    ok(d2.getElementById('b-editar').closest('header') !== null, 'Editar mora no topo, ao lado do 🗑️ Limpar');
+    ok(d2.getElementById('b-editar').hidden === true, 'Editar nasce escondido (só aparece com site aberto)');
+    ok(!srcApp.includes('#pbar') && d2.getElementById('frame') && srcApp.indexOf('<iframe') > srcApp.indexOf('#vsite{position:fixed;inset:0;top:53px'), 'preview sem barra extra — iframe em tela cheia sob o header');
+    ok(/verSite\(txt\)\{\s*\$\('#ved'\)\.hidden=true;\$\('#vsite'\)\.hidden=false;\$\('#b-editar'\)\.hidden=false;/.test(srcApp) && /verEditor\(\)\{\$\('#ved'\)\.hidden=false;\$\('#vsite'\)\.hidden=true;\$\('#b-editar'\)\.hidden=true;\}/.test(srcApp), 'verSite mostra / verEditor esconde o Editar');
+    ok(/removeAttribute\('srcdoc'\)[\s\S]{0,40}f\.srcdoc=txt/.test(srcApp), 'verSite remove srcdoc antes de setar → reload garantido no re-ver');
   }
 
   console.log('— 🔥 CRA: NADA DE CARA DE IA (3 arquivos) —');

@@ -58,10 +58,8 @@ body.drag .dz,body.drag main{border-color:var(--amber)}
 body.drag::after{content:'Solte a pasta aqui 📁';position:fixed;inset:0;background:rgba(16,14,10,.92);z-index:100;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--amber)}
 .flist{margin-top:10px;font-size:12px;color:var(--muted);max-height:150px;overflow:auto}
 .flist b{color:var(--tx)}
-/* site (preview) — barra própria, nada flutua sobre o site */
+/* site (preview) — ✏️ Editar mora no topo, ao lado do 🗑️ Limpar */
 #vsite{position:fixed;inset:0;top:53px;display:flex;flex-direction:column;background:var(--bg)}
-#pbar{height:46px;display:flex;align-items:center;gap:12px;padding:0 12px;background:var(--bg2);border-bottom:1.5px solid var(--line);flex-shrink:0}
-#pbar .hint{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #frame{flex:1;border:0;width:100%;background:#fff}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--bg3);border:1.5px solid var(--amber);color:var(--tx);padding:11px 17px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:80;max-width:92vw;text-align:center}
 .toast.on{opacity:1}
@@ -73,6 +71,7 @@ body.drag::after{content:'Solte a pasta aqui 📁';position:fixed;inset:0;backgr
 <header class="top">
   <span class="logo"><span class="eye">👁️</span>CodePreview</span>
   <span class="status" id="st">nada carregado</span>
+  <button class="btn g" id="b-editar" hidden>✏️ Editar</button>
   <button class="btn d" id="b-limpar">🗑️ Limpar site</button>
 </header>
 
@@ -104,10 +103,6 @@ body.drag::after{content:'Solte a pasta aqui 📁';position:fixed;inset:0;backgr
 </main>
 
 <div id="vsite" hidden>
-  <div id="pbar">
-    <button id="b-editar" class="btn g">✏️ Editar</button>
-    <span class="hint">seu site roda num iframe isolado (sandbox) — nada vaza pra esta página</span>
-  </div>
   <iframe id="frame" title="preview do site" sandbox="allow-scripts allow-forms allow-popups allow-modals"></iframe>
 </div>
 
@@ -185,9 +180,9 @@ async function gravar(pares){
 }
 
 /* ── editor ⇄ site ── */
-function verEditor(){$('#ved').hidden=false;$('#vsite').hidden=true;}
+function verEditor(){$('#ved').hidden=false;$('#vsite').hidden=true;$('#b-editar').hidden=true;}
 function verSite(txt){
- $('#ved').hidden=true;$('#vsite').hidden=false;
+ $('#ved').hidden=true;$('#vsite').hidden=false;$('#b-editar').hidden=false;
  const f=$('#frame');
  if(txt){
   f.removeAttribute('src');f.removeAttribute('srcdoc');
