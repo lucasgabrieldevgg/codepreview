@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm test
+      - name: higiene CRA
+        run: |
+          grep -q "JetBrains Mono" index.html
+          if grep -E "font-family:'Inter'|linear-gradient" index.html p/v1/index.html sw.js | grep -v "repeating-linear-gradient" | grep -qv "Zero gradiente"; then
+            echo "delator visual"; exit 1
+          fi
+          if grep -Eq "animation:[^;]*infinite" index.html; then echo "pulso infinito"; exit 1; fi
+          if grep -rEn "ghp_[A-Za-z0-9]{20}|sk-or-v1-|vcp_[A-Za-z0-9]{20}" index.html sw.js p/; then echo "segredo real exposto"; exit 1; fi
+          test -f LICENSE

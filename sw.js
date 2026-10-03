@@ -11,7 +11,7 @@ self.addEventListener('fetch', e => {
     caches.open(CACHE)
       .then(c => c.match(e.request, { ignoreSearch: true }))
       .then(r => r || new Response(
-`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><style>body{background:#0d0f13;color:#eef1f6;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center}p{color:#98a0ad;max-width:420px;padding:24px;line-height:1.65}</style></head><body><p>🫥 esse arquivo não está no projeto carregado — ele foi limpo ou não fez parte da pasta.<br><br>Volta no CodePreview e carrega de novo 😉</p></body></html>`,
+`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><style>body{background:#100e0a;color:#f2e8d5;font-family:ui-monospace,Menlo,Consolas,monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center}p{color:#9a8b72;max-width:420px;padding:24px;line-height:1.65}</style></head><body><p>🫥 esse arquivo não está no projeto carregado — ele foi limpo ou não fez parte da pasta.<br><br>Volta no CodePreview e carrega de novo 😉</p></body></html>`,
         { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } }))
   );
 });

@@ -1,5 +1,7 @@
 # 👁️ CodePreview
 
+[![ci](https://github.com/lucasgabrieldevgg/codepreview/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasgabrieldevgg/codepreview/actions/workflows/ci.yml)
+
 **Cole o HTML, veja o site.** Ou carregue a pasta do seu projeto e veja ele renderizado **com estrutura de verdade** — `css/`, `js/`, `img/`, caminhos relativos, tudo como no site real.
 
 ## Como usa
@@ -17,5 +19,17 @@ Um **mini-servidor dentro do navegador** (Service Worker + Cache API) serve seus
 Limites honestos: é para sites **estáticos** (html/css/js/imagens/fontes). Projeto com build (npm/React sem `dist` pronto) ou backend não renderiza.
 
 Abra: **https://lucasgabrieldevgg.github.io/codepreview/**
+
+## Desenvolvimento
+
+```
+npm install && npm test
+```
+
+**35 checks** (jsdom, sem rede) em cima do **CP-CORE** (funções puras): mapa de MIME, pular `node_modules`/`.git`, escolha do índice (raiz `index.html` → sub-index mais raso → primeiro `.html`), plano de carga 8 MB/40 MB — mais boot do app com iframe sandbox e a **guarda anti-vibe**: JetBrains Mono de ponta a ponta, zero gradiente com transição (única textura: scanline CRT de degrau duro), zero pulso infinito, zero segredo.
+
+## Identidade — MONITOR DE FÓSFORO ÂMBAR (P3)
+
+Ferramenta de dev veste tipografia de dev: **JetBrains Mono** de ponta a ponta, âmbar sólido (`#ffb02e`) sobre preto quente, sombras duras deslocadas e uma scanline sutil de CRT. Nada de Inter, gradiente ou coisa piscando.
 
 Feito por [lucasgabrieldevgg](https://github.com/lucasgabrieldevgg) 💜
