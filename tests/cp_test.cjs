@@ -103,6 +103,11 @@ function arq(bytes) { return { size: bytes }; }
     ok(/name: Deploy to GitHub Pages/.test(fs.readFileSync(path.join(root, '.github/workflows/deploy.yml'), 'utf8')), 'workflow de deploy preservado');
   }
 
-  console.log(`\n═══ RESULTADO: ${pass} ✓ · ${fail} ✗ ═══`);
+  ok(html.includes('::selection{background:rgba(255,176,46,.35)'), 'piso: seleção âmbar');
+ok(html.includes(':focus-visible{outline:2px solid var(--amber)'), 'piso: foco visível');
+ok(html.includes('scrollbar-color:var(--line)'), 'piso: scrollbar temático');
+ok(html.includes('::placeholder{color:var(--muted)'), 'piso: placeholders legíveis');
+ok(html.includes('<meta name="description"'), 'piso: meta description');
+console.log(`\n═══ RESULTADO: ${pass} ✓ · ${fail} ✗ ═══`);
   process.exit(fail ? 1 : 0);
 })().catch(e => { console.error('CRASH:', e); process.exit(1); });
